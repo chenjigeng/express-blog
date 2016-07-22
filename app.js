@@ -4,12 +4,13 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var http = require('http');
+var app = express();
+var http = require('http').Server(app);
 var routes = require('./app-express/app/routes/post');
 var users = require('./app-express/app/routes/users');
 var debug = require('debug')('express-blog:server');
 var multipart = require('connect-multiparty');
-var app = express();
+var io = require("socket.io")(http)
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -46,9 +47,15 @@ app.use(function(err, req, res, next) {
   });
 });
 
+io.on("connection", function(socket) {
+	socket.on("chat message", function(msg) {
+
+	})
+})
+
 module.exports = app;
 var port = 3010;
-app.listen(port, function() {
+http.listen(port, function() {
   console.log('server is listening on port ' + port);
 });
 
